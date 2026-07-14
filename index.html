@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nano Class</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Nanum+Pen+Script&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --red: #ff2d2d;
+      --red-glow: rgba(255, 45, 45, 0.35);
+      --purple: #7c3aed;
+      --white: #ffffff;
+      --gray: #888888;
+      --card: #161616;
+      --border: #222222;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding: 90px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,45,45,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* 유튜브 로고 네온 SVG */
+    .yt-logo-wrap {
+      position: relative;
+      width: 340px;
+      height: 240px;
+      margin-bottom: 48px;
+    }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      word-break: keep-all;
+    }
+
+    .hero-title span { color: var(--red); }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--gray);
+      margin-bottom: 40px;
+      max-width: 480px;
+      word-break: keep-all;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover { border-color: var(--white); transform: translateY(-2px); }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 64px 24px 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 720px;
+      width: 100%;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 28px 24px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--white);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    /* SECTION */
+    section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 100px 24px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 48px;
+      word-break: keep-all;
+    }
+
+    /* PROOF */
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .proof-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .proof-card:hover { border-color: #333; }
+
+    .proof-num {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+
+    .proof-desc {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    /* CURRICULUM */
+    .curriculum-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .curriculum-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-size: 15px;
+      word-break: keep-all;
+    }
+
+    .curriculum-list li::before {
+      content: '✓';
+      color: var(--red);
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .price-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: border-color 0.2s;
+      height: 100%;
+    }
+
+    .price-card:hover { border-color: #333; }
+
+    .price-card.featured {
+      border-color: var(--red);
+      box-shadow: 0 0 32px rgba(255,45,45,0.12);
+    }
+
+    .price-badge {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .price-name {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .price-amount {
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .price-amount span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--gray);
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-grow: 1;
+    }
+
+    .price-features li {
+      font-size: 14px;
+      color: var(--gray);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .price-features li::before {
+      content: '—';
+      color: var(--red);
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+    }
+
+    .price-features li strong { color: var(--white); }
+
+    .price-note {
+      font-size: 12px;
+      color: var(--gray);
+      word-break: keep-all;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      text-align: left;
+      padding: 20px 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .faq-q .arrow {
+      color: var(--gray);
+      transition: transform 0.2s;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .arrow { transform: rotate(45deg); }
+
+    .faq-a {
+      display: none;
+      padding: 0 24px 20px;
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    .faq-item.open .faq-a { display: block; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 100px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-section .section-title { margin-bottom: 16px; }
+
+    .cta-section .hero-sub { margin: 0 auto 40px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    footer a { color: var(--gray); text-decoration: none; margin: 0 12px; }
+    footer a:hover { color: var(--white); }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      30%, 70% { opacity: 1; }
+    }
+
+    .fade-text {
+      animation: fadeInOut 2.5s ease-in-out infinite;
+    }
+
+    .tooltip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #444;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .tooltip-box {
+      display: none;
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 400;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      z-index: 10;
+      width: 200px;
+      text-align: center;
+    }
+
+    .tooltip-wrap:hover .tooltip-box { display: block; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .yt-logo-wrap { width: 240px; height: 170px; }
+      .stats { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Nano Class</a>
+  <ul class="nav-links">
+    <li><a href="https://www.youtube.com/channel/UCLWnEKJM9Nb2__lF0xfwTlQ" target="_blank">강의 맛보기</a></li>
+    <li><a href="#proof">수익 인증</a></li>
+    <li><a href="#curriculum">커리큘럼</a></li>
+    <li><a href="#pricing">가격</a></li>
+    <li><a href="#faq">자주 묻는 질문</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+
+  <p class="hero-eyebrow">3년 누적 수익 · 8억</p>
+
+  <div class="yt-logo-wrap">
+    <svg viewBox="0 0 340 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:340px;height:240px;filter:drop-shadow(0 0 18px #ff2d2d) drop-shadow(0 0 40px rgba(255,45,45,0.35));">
+      <rect x="4" y="4" width="332" height="232" rx="60" ry="60"
+        fill="none" stroke="#ff2d2d" stroke-width="6"/>
+      <polygon points="140,80 140,160 210,120" fill="#ff2d2d"
+        style="filter:drop-shadow(0 0 10px #ff2d2d)"/>
+    </svg>
+  </div>
+  <h1 class="hero-title">유튜브 쇼츠로만<br><span style="color:var(--white);">3년</span> <span>8억</span> 벌었습니다.<br>전부 공개합니다.</h1>
+
+
+  <div class="btn-group" style="margin-top:36px;">
+    <a href="#pricing" class="btn-secondary">전자책 구매하기</a>
+    <a href="#pricing" class="btn-primary">1대1 강의 신청하기</a>
+  </div>
+
+
+</div>
+
+<hr class="divider" />
+
+<!-- PROOF -->
+<section id="proof">
+  <p class="section-label">수익 인증</p>
+  <h2 class="section-title">홈택스 수익 인증입니다.</h2>
+  <div style="position:relative;width:100%;height:400px;background:#161616;border:1px solid #222;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+    <div style="position:absolute;inset:0;background:rgba(0,0,0,0.75);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+      <span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:0.1em;">준비중</span>
+    </div>
+  </div>
+
+</section>
+
+<hr class="divider" />
+
+<!-- CURRICULUM -->
+<section id="curriculum">
+  <p class="section-label">커리큘럼</p>
+  <h2 class="section-title">준비중입니다.</h2>
+</section>
+
+<hr class="divider" />
+
+<!-- PRICING -->
+<section id="pricing">
+  <p class="section-label">가격</p>
+  <div class="pricing-grid" style="align-items:start;">
+
+    <!-- 전자책 -->
+    <div style="display:flex;flex-direction:column;">
+      <div style="visibility:hidden;display:flex;align-items:center;gap:10px;margin-bottom:-1px;">
+        <span class="price-badge" style="display:inline-block;">선착순 5명</span>
+        <span style="font-size:13px;">현재 2자리 남았습니다!</span>
+      </div>
+      <div class="price-card" style="position:relative;">
+        <p class="price-name">전자책</p>
+        <div class="price-amount">
+          <div style="font-size:16px;font-weight:400;color:#888;text-decoration:line-through;">500,000원</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:4px;padding-left:12px;">
+            <span style="font-size:16px;font-weight:900;color:#ff2d2d;">10%</span>
+            <span style="font-size:28px;font-weight:900;color:var(--white);">450,000원</span>
+          </div>
+        </div>
+        <ul class="price-features">
+          <li>월~목 저녁 7시~12시</li>
+          <li>1대1 수업 및 시연</li>
+          <li>무한 이론, 무한 피드백, 무한 질문 및 답변</li>
+          <li>선착순 5명 전액환불 이벤트</li>
+        </ul>
+        <a href="#" class="btn-secondary" style="margin-top:auto;">전자책 구매하기</a>
+        <!-- 준비중 오버레이 -->
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.75);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:0.1em;">준비중</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전자책 + 1대1 -->
+    <div style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:-1px;">
+        <span class="price-badge" style="display:inline-block;">선착순 5명</span>
+        <span class="fade-text" style="font-size:13px;color:#fff;font-weight:700;">현재 2자리 남았습니다!</span>
+      </div>
+      <div class="price-card featured" style="border-top-left-radius:0;">
+        <p class="price-name">전자책 + 1대1 피드백 + <span style="color:#60cfff;">전액환불 EVENT</span>
+          <span class="tooltip-wrap">?<span class="tooltip-box">4개월 동안 수강생 유튜브 수익 200만원 안 나올시<br>100% 전액환불</span></span>
+        </p>
+        <div class="price-amount">
+          <div style="font-size:16px;font-weight:400;color:#888;text-decoration:line-through;">2,200,000원</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:4px;padding-left:12px;">
+            <span style="font-size:16px;font-weight:900;color:#ff2d2d;">10%</span>
+            <span style="font-size:28px;font-weight:900;color:var(--white);">1,980,000원</span>
+          </div>
+        </div>
+        <ul class="price-features">
+          <li>월~목 저녁 7시~12시</li>
+          <li>1대1 원격 수업 및 시연</li>
+          <li>무한 이론, 무한 피드백, 무한 질문 및 답변</li>
+          <li>선착순 5명 전액환불 이벤트</li>
+        </ul>
+        <a href="https://open.kakao.com/o/sZ0hgHwi" target="_blank" class="btn-primary" style="margin-top:auto;">1대1 강의 신청하기</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- FAQ -->
+<section id="faq">
+  <p class="section-label">자주 묻는 질문</p>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggle(this)">
+        200만원 환불 조건이 정확히 어떻게 되나요?
+        <span class="arrow">+</span>
+      </button>
+      <div class="faq-a">결제일로부터 4개월 이내에 유튜브 수익이 200만원을 넘지 못하면 전액 환불입니다. 수익 인증은 유튜브 스튜디오로 확인합니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggle(this)">
+        전자책은 어떻게 받나요?
+        <span class="arrow">+</span>
+      </button>
+      <div class="faq-a">결제 완료 즉시 입력하신 이메일로 PDF 파일이 자동 발송됩니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggle(this)">
+        1대1 강의는 어떤 방식으로 진행되나요?
+        <span class="arrow">+</span>
+      </button>
+      <div class="faq-a">원격 프로그램으로 1대1로 수강생 화면을 보면서 진행되고, 카카오톡 채팅으로 소통합니다. 4개월 동안 횟수 제한 없이 채널 분석, 영상 피드백, 방향 설정 등 무엇이든 물어보실 수 있습니다.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2 class="section-title">저는 유튜브로 인생이 바뀌었습니다.<br>모든 노하우를 아낌없이 알려드립니다.</h2>
+  <div class="btn-group">
+    <a href="#pricing" class="btn-primary">전자책 구매하기</a>
+    <a href="#pricing" class="btn-secondary">1대1 신청하기 (선착순 2명)</a>
+  </div>
+</div>
+
+<!-- 카카오톡 플로팅 버튼 -->
+<a href="https://open.kakao.com/o/sZ0hgHwi" target="_blank" style="position:fixed;bottom:32px;right:32px;z-index:999;background:#FEE500;border-radius:50px;padding:12px 20px;display:flex;align-items:center;gap:10px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.667 1.556 5.01 3.938 6.438L5 21l4.563-2.438C10.344 18.844 11.156 19 12 19c5.523 0 10-3.477 10-7.5S17.523 3 12 3z" fill="#000"/>
+  </svg>
+  <span style="font-size:14px;font-weight:900;color:#000;">1:1 상담</span>
+</a>
+
+
+<footer>
+  <div style="margin-bottom:12px;">
+    <a href="terms.html">이용약관</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="refund.html">환불정책</a>
+  </div>
+  <p style="margin-bottom:8px;">상호명: 나노클래스 | 대표자: 박상진 | 사업자등록번호: 533-78-00585 | 이메일: info@nanoclass.kr</p>
+  <p>© 2026 Nano Class. All rights reserved.</p>
+</footer>
+
+<script>
+  function toggle(btn) {
+    const item = btn.closest('.faq-item');
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
