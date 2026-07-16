@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>결제 완료 - Nano Class</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: 'Noto Sans KR', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .container { max-width: 480px; width: 100%; padding: 24px; text-align: center; }
+    .icon { font-size: 60px; margin-bottom: 16px; }
+    h1 { font-size: 22px; font-weight: 900; margin-bottom: 24px; }
+    .info { background: #161616; border: 1px solid #222; border-radius: 12px; padding: 24px; text-align: left; margin-bottom: 24px; }
+    .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+    .label { color: #888; }
+    .value { color: #fff; font-weight: 700; word-break: break-all; text-align: right; }
+    .home-btn { display: inline-block; padding: 14px 32px; background: #ff2d2d; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">✅</div>
+    <h1>결제가 완료되었습니다</h1>
+    <div class="info" id="info"></div>
+    <a href="index.html" class="home-btn">홈으로 돌아가기</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId");
+    const amount = params.get("amount");
+    const paymentKey = params.get("paymentKey");
+
+    document.getElementById("info").innerHTML = `
+      <div class="row"><span class="label">주문번호</span><span class="value">${orderId || "-"}</span></div>
+      <div class="row"><span class="label">결제금액</span><span class="value">${amount ? Number(amount).toLocaleString() + "원" : "-"}</span></div>
+      <div class="row"><span class="label">결제키</span><span class="value">${paymentKey || "-"}</span></div>
+    `;
+  </script>
+</body>
+</html>

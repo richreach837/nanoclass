@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>결제하기 - Nano Class</title>
+  <script src="https://js.tosspayments.com/v2/standard"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: 'Noto Sans KR', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .container { max-width: 480px; width: 100%; padding: 24px; }
+    .card { background: #161616; border: 1px solid #222; border-radius: 16px; padding: 32px; }
+    h1 { font-size: 20px; font-weight: 900; margin-bottom: 24px; }
+    .product-info { background: #0a0a0a; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .product-name { font-size: 15px; color: #aaa; margin-bottom: 8px; }
+    .product-price { font-size: 26px; font-weight: 900; color: #ff2d2d; }
+    #payment-method { margin-bottom: 16px; }
+    #agreement { margin-bottom: 20px; }
+    .pay-btn { width: 100%; padding: 16px; background: #ff2d2d; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .pay-btn:hover { background: #e02525; }
+    .back { display: inline-block; margin-bottom: 20px; color: #888; font-size: 14px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back">← 홈으로</a>
+    <div class="card">
+      <h1>결제하기</h1>
+      <div class="product-info">
+        <p class="product-name">1대1 영상 10개 피드백</p>
+        <p class="product-price">150,000원</p>
+      </div>
+      <div id="payment-method"></div>
+      <div id="agreement"></div>
+      <button class="pay-btn" id="pay-button">결제하기</button>
+    </div>
+  </div>
+
+  <script>
+    const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+    const customerKey = "customer_" + Math.random().toString(36).slice(2);
+
+    const tossPayments = TossPayments(clientKey);
+    const widgets = tossPayments.widgets({ customerKey });
+
+    async function init() {
+      await widgets.setAmount({ currency: "KRW", value: 150000 });
+
+      await widgets.renderPaymentMethods({
+        selector: "#payment-method",
+      });
+
+      await widgets.renderAgreement({
+        selector: "#agreement",
+      });
+    }
+    init();
+
+    document.getElementById("pay-button").addEventListener("click", async function () {
+      try {
+        await widgets.requestPayment({
+          orderId: "order-" + Date.now(),
+          orderName: "1대1 영상 10개 피드백",
+          successUrl: window.location.origin + window.location.pathname.replace("payment.html", "success.html"),
+          failUrl: window.location.origin + window.location.pathname.replace("payment.html", "fail.html"),
+          customerEmail: "",
+          customerName: "",
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

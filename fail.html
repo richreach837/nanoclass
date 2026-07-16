@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>결제 실패 - Nano Class</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: 'Noto Sans KR', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .container { max-width: 480px; width: 100%; padding: 24px; text-align: center; }
+    .icon { font-size: 60px; margin-bottom: 16px; }
+    h1 { font-size: 22px; font-weight: 900; margin-bottom: 24px; }
+    .info { background: #161616; border: 1px solid #222; border-radius: 12px; padding: 24px; text-align: left; margin-bottom: 24px; }
+    .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+    .label { color: #888; }
+    .value { color: #fff; font-weight: 700; word-break: break-all; text-align: right; }
+    .home-btn { display: inline-block; padding: 14px 32px; background: #333; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">❌</div>
+    <h1>결제에 실패했습니다</h1>
+    <div class="info" id="info"></div>
+    <a href="payment.html" class="home-btn">다시 시도하기</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const message = params.get("message");
+
+    document.getElementById("info").innerHTML = `
+      <div class="row"><span class="label">에러코드</span><span class="value">${code || "-"}</span></div>
+      <div class="row"><span class="label">에러메시지</span><span class="value">${message || "-"}</span></div>
+    `;
+  </script>
+</body>
+</html>
